@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casamento - Gabriel e Maria Laura</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f4f9;
+            background-image: url('fundo.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .overlay {
+            min-height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.65);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 100%;
+            width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { color: #2c3e50; margin: 0 0 5px 0; font-size: 1.8rem; }
+        .data { color: #7f8c8d; font-weight: 600; margin-bottom: 25px; font-size: 1.1rem; }
+        p.instrucao { margin-bottom: 20px; color: #34495e; font-size: 0.95rem; line-height: 1.5; }
+        input[type="text"] {
+            width: 100%; padding: 14px; margin-bottom: 20px;
+            border: 1px solid #ccc; border-radius: 6px;
+            box-sizing: border-box; font-family: inherit; font-size: 1rem;
+        }
+        button {
+            background-color: #27ae60; color: white; border: none;
+            padding: 15px; width: 100%; border-radius: 6px;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: background-color 0.2s; font-family: inherit;
+        }
+        button:hover { background-color: #219150; }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        .hidden { display: none !important; }
+        .pix-section img {
+            width: 220px; height: 220px; margin: 15px 0;
+            border-radius: 8px; border: 1px solid #ddd; padding: 5px; background: #fff;
+        }
+        .pix-key {
+            background: #f8f9fa; padding: 12px; border-radius: 6px;
+            font-weight: 600; color: #2c3e50; word-break: break-all;
+            border: 1px dashed #bdc3c7; font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay">
+    <!-- TELA 1: RSVP -->
+    <div id="tela-rsvp" class="card">
+        <h1>Gabriel e Maria Laura</h1>
+        <p class="data">15/10/2026 às 19:00</p>
+        <p class="instrucao">Por favor, confirme sua presença preenchendo o formulário abaixo:</p>
+        <form id="form-presenca">
+            <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required>
+            <button type="submit" id="btn-confirmar">Confirmar Presença</button>
+        </form>
+    </div>
+
+    <!-- TELA 2: AGRADECIMENTO E PIX -->
+    <div id="tela-pix" class="card hidden">
+        <h2 style="color: #27ae60; margin-top:0;">Presença Confirmada!</h2>
+        <p style="color: #34495e; font-size: 0.95rem; margin-bottom: 20px;">Agradecemos muito por confirmar. Mal podemos esperar para celebrar com você!</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="color: #34495e; font-size: 0.95rem;">Se quiser contribuir com a nossa lua de mel ou dar algum presente, utilize o PIX abaixo:</p>
+        <div class="pix-section">
+            <!-- Caso a imagem falhe ao carregar, ela não ficará com o ícone de 'quebrada' na tela -->
+            <img src="qrcode.png" alt="QR Code PIX" onerror="this.style.display='none'">
+            <p style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 5px;">Chave PIX:</p>
+            <div class="pix-key">SUA_CHAVE_PIX_AQUI</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('form-presenca').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btn-confirmar');
+        const nomeInput = document.getElementById('nome');
+        const nome = nomeInput.value.trim();
+        
+        if (!nome) return;
+
+        btn.innerText = 'Enviando...';
+        btn.disabled = true;
+
+        const scriptURL = 'COLE_AQUI_A_URL_DO_GOOGLE_APPS_SCRIPT';
+        
+        // Se a URL não foi configurada, apenas avança a tela 
+        if (scriptURL === 'COLE_AQUI_A_URL_DO_GOOGLE_APPS_SCRIPT' || scriptURL === '') {
+            console.log("Modo de teste: POST ignorado pois a URL do Apps Script não foi configurada.");
+            mostrarTelaPix();
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('nome', nome);
+
+        // O POST para o Google Web App frequentemente tem problemas com CORS, então usamos mode: 'no-cors'
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: formData, 
+            mode: 'no-cors' 
+        })
+        .then(() => {
+            console.log("Dados enviados com sucesso (no-cors).");
+            mostrarTelaPix();
+        })
+        .catch(error => {
+            console.error("Erro no fetch HTTP:", error);
+            alert('Ocorreu um erro ao enviar. Por favor, tente novamente.');
+            btn.innerText = 'Confirmar Presença';
+            btn.disabled = false;
+        });
+    });
+
+    function mostrarTelaPix() {
+        document.getElementById('tela-rsvp').classList.add('hidden');
+        document.getElementById('tela-pix').classList.remove('hidden');
+    }
+</script>
+</body>
+</html>
