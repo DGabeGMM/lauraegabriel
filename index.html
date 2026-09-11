@@ -105,14 +105,7 @@
         btn.innerText = 'Enviando...';
         btn.disabled = true;
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzZ2nqq512n6NEUuP2PBdxdPtzrCzQjR2jrMuax1ztNuirITj95iQQpEOPtbL83r8_Y/exec';
-        
-        // Se a URL não foi configurada, apenas avança a tela 
-        if (scriptURL === 'https://script.google.com/macros/s/AKfycbzZ2nqq512n6NEUuP2PBdxdPtzrCzQjR2jrMuax1ztNuirITj95iQQpEOPtbL83r8_Y/exec' || scriptURL === '') {
-            console.log("Modo de teste: POST ignorado pois a URL do Apps Script não foi configurada.");
-            mostrarTelaPix();
-            return;
-        }
+       const scriptURL = 'https://script.google.com/macros/s/AKfycbzZ2nqq512n6NEUuP2PBdxdPtzrCzQjR2jrMuax1ztNuirITj95iQQpEOPtbL83r8_Y/exec';
 
         const formData = new FormData();
         formData.append('nome', nome);
