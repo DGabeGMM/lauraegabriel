@@ -87,7 +87,7 @@
             <!-- Caso a imagem falhe ao carregar, ela não ficará com o ícone de 'quebrada' na tela -->
             <img src="qrcode.png" alt="QR Code PIX" onerror="this.style.display='none'">
             <p style="font-size: 0.85rem; color: #7f8c8d; margin-bottom: 5px;">Chave PIX:</p>
-            <div class="pix-key">SUA_CHAVE_PIX_AQUI</div>
+            <div class="pix-key">67981730508</div>
         </div>
     </div>
 </div>
@@ -105,10 +105,10 @@
         btn.innerText = 'Enviando...';
         btn.disabled = true;
 
-        const scriptURL = 'COLE_AQUI_A_URL_DO_GOOGLE_APPS_SCRIPT';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzZ2nqq512n6NEUuP2PBdxdPtzrCzQjR2jrMuax1ztNuirITj95iQQpEOPtbL83r8_Y/exec';
         
         // Se a URL não foi configurada, apenas avança a tela 
-        if (scriptURL === 'COLE_AQUI_A_URL_DO_GOOGLE_APPS_SCRIPT' || scriptURL === '') {
+        if (scriptURL === 'https://script.google.com/macros/s/AKfycbzZ2nqq512n6NEUuP2PBdxdPtzrCzQjR2jrMuax1ztNuirITj95iQQpEOPtbL83r8_Y/exec' || scriptURL === '') {
             console.log("Modo de teste: POST ignorado pois a URL do Apps Script não foi configurada.");
             mostrarTelaPix();
             return;
